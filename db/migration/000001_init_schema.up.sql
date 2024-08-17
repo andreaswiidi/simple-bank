@@ -4,7 +4,7 @@ CREATE TABLE "accounts" (
   "username" varchar UNIQUE NOT NULL,
   "balance" bigint NOT NULL,
   "currency" varchar NOT NULL,
-  "created_at" timestamptz DEFAULT (now()),
+  "created_at" timestamptz NOT NULL DEFAULT (now()),
   "updated_at" timestamptz
 );
 
@@ -12,7 +12,7 @@ CREATE TABLE "transaction_history" (
   "id" bigserial PRIMARY KEY,
   "account_id" bigint NOT NULL,
   "ammount" bigint NOT NULL,
-  "created_at" timestamptz DEFAULT (now())
+  "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "transfers_history" (
@@ -20,7 +20,7 @@ CREATE TABLE "transfers_history" (
   "from_account_id" bigint NOT NULL,
   "to_account_id" bigint NOT NULL,
   "ammount" bigint NOT NULL,
-  "created_at" timestamptz DEFAULT (now())
+  "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 ALTER TABLE "transaction_history" ADD FOREIGN KEY ("account_id") REFERENCES "accounts" ("id");

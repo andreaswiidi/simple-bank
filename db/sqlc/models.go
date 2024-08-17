@@ -6,6 +6,7 @@ package db
 
 import (
 	"database/sql"
+	"time"
 )
 
 type Account struct {
@@ -14,7 +15,7 @@ type Account struct {
 	Username  string
 	Balance   int64
 	Currency  string
-	CreatedAt sql.NullTime
+	CreatedAt time.Time
 	UpdatedAt sql.NullTime
 }
 
@@ -22,7 +23,7 @@ type TransactionHistory struct {
 	ID        int64
 	AccountID int64
 	Ammount   int64
-	CreatedAt sql.NullTime
+	CreatedAt time.Time
 }
 
 type TransfersHistory struct {
@@ -30,5 +31,5 @@ type TransfersHistory struct {
 	FromAccountID int64
 	ToAccountID   int64
 	Ammount       int64
-	CreatedAt     sql.NullTime
+	CreatedAt     time.Time
 }
