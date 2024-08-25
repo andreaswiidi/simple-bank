@@ -6,12 +6,13 @@ import (
 	"testing"
 	"time"
 
+	sqlc "github.com/andreaswiidi/simple-bank/db/sqlc"
 	"github.com/andreaswiidi/simple-bank/util"
 	"github.com/stretchr/testify/require"
 )
 
-func createRandomAccount() (Account, CreateAccountParams, error) {
-	arg := CreateAccountParams{
+func createRandomAccount() (sqlc.Account, sqlc.CreateAccountParams, error) {
+	arg := sqlc.CreateAccountParams{
 		Fullname: util.RandomOwner(),
 		Username: util.RandomOwner(),
 		Balance:  util.RandomMoney(),
@@ -55,10 +56,12 @@ func TestUpdateAccount(t *testing.T) {
 	account1, _, err := createRandomAccount()
 	require.NoError(t, err)
 
-	arg := UpdateAccountParams{
+	timeEdit := time.Now()
+
+	arg := sqlc.UpdateAccountParams{
 		ID:        account1.ID,
 		Balance:   util.RandomMoney(),
-		UpdatedAt: sql.NullTime{Time: time.Now(), Valid: true},
+		UpdatedAt: sql.NullTime{Time: timeEdit, Valid: true},
 	}
 
 	account2, err := testQueries.UpdateAccount(context.Background(), arg)
@@ -71,6 +74,7 @@ func TestUpdateAccount(t *testing.T) {
 	require.Equal(t, arg.Balance, account2.Balance)
 	require.Equal(t, account1.Currency, account2.Currency)
 	require.WithinDuration(t, account1.CreatedAt, account2.CreatedAt, time.Second)
+	require.WithinDuration(t, timeEdit, account2.UpdatedAt.Time, time.Second)
 }
 
 func TestDeleteAccount(t *testing.T) {
@@ -86,14 +90,14 @@ func TestDeleteAccount(t *testing.T) {
 }
 
 func TestListAccounts(t *testing.T) {
-	var lastAccount Account
+	var lastAccount sqlc.Account
 	for i := 0; i < 10; i++ {
 		tempAccount, _, err := createRandomAccount()
 		require.NoError(t, err)
 		lastAccount = tempAccount
 	}
 
-	arg := ListAccountsParams{
+	arg := sqlc.ListAccountsParams{
 		Username: lastAccount.Username,
 		Limit:    5,
 		Offset:   0,

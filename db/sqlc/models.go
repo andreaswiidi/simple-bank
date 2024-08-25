@@ -20,16 +20,18 @@ type Account struct {
 }
 
 type TransactionHistory struct {
-	ID        int64
-	AccountID int64
-	Ammount   int64
-	CreatedAt time.Time
+	ID                int64
+	AccountID         int64
+	Amount            int64
+	TransactionType   string
+	TransferHistoryID sql.NullInt64
+	CreatedAt         time.Time
 }
 
 type TransfersHistory struct {
 	ID            int64
 	FromAccountID int64
 	ToAccountID   int64
-	Ammount       int64
+	Amount        int64
 	CreatedAt     time.Time
 }
